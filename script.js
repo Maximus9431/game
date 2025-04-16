@@ -1,46 +1,34 @@
-// Инициализация состояния питомца
-let petLevel = 0;
-let actionCount = 0;
 
-// Текущие состояния питомца
-const PET_STATES = {
-    0: "Яйцо 🥚",
-    1: "Малыш 🐣",
-    2: "Подросток 🐤",
-    3: "Взрослый 🦆",
-    4: "Чемпион 🦢"
-};
+const eggColors = ['blue', 'green', 'red', 'purple', 'yellow'];
+const eggColor = eggColors[Math.floor(Math.random() * eggColors.length)];
+const egg = document.getElementById('egg');
+const dragon = document.getElementById('dragon');
+const instruction = document.getElementById('instruction');
 
-// Обновление состояния питомца
-function updatePetState() {
-    document.getElementById("pet-state").textContent = `Текущий уровень: ${PET_STATES[petLevel]}`;
-}
+egg.src = `eggs/${eggColor}.png`;
 
-// Выполнение действия
-document.getElementById("action-button").addEventListener("click", () => {
-    actionCount++;
-    document.getElementById("status").textContent = `Выполнено действий: ${actionCount}/3`;
+let startX = 0;
+let cracked = false;
 
-    if (actionCount >= 3 && petLevel < 4) {
-        petLevel++;
-        actionCount = 0;
-        updatePetState();
-    }
-
-    // Отправка данных в бот (если нужно)
-    sendToBot();
+egg.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
 });
 
-// Отправка данных в бот через Telegram WebApp API
-function sendToBot() {
-    const data = {
-        level: petLevel,
-        actions: actionCount
-    };
+egg.addEventListener('touchend', e => {
+    const endX = e.changedTouches[0].clientX;
+    const distance = endX - startX;
+    if (Math.abs(distance) > 50 && !cracked) {
+        cracked = true;
+        crackEgg();
+    }
+});
 
-    // Используйте Telegram WebApp API для отправки данных
-    Telegram.WebApp.sendData(JSON.stringify(data));
+function crackEgg() {
+    egg.classList.add('cracked');
+    setTimeout(() => {
+        egg.classList.add('hidden');
+        dragon.classList.remove('hidden');
+        instruction.textContent = 'Поздравляем! У тебя появился дракон 🐉';
+        Telegram.WebApp.sendData(JSON.stringify({ level: 1, actions: 0 }));
+    }, 800);
 }
-
-// Инициализация при загрузке
-updatePetState();
