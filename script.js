@@ -1,3 +1,10 @@
+// Инициализация Telegram WebApp
+const tg = window.Telegram.WebApp;
+
+// Настройка интерфейса Mini App
+tg.setHeaderColor("#ffffff"); // Цвет заголовка
+tg.setBackgroundColor("#f4f4f9"); // Цвет фона
+
 // Инициализация состояния питомца
 let petLevel = 0;
 let actionCount = 0;
@@ -27,20 +34,25 @@ document.getElementById("action-button").addEventListener("click", () => {
         updatePetState();
     }
 
-    // Отправка данных в бот (если нужно)
+    // Отправка данных в бот через Telegram WebApp API
     sendToBot();
 });
 
-// Отправка данных в бот через Telegram WebApp API
+// Отправка данных в бот
 function sendToBot() {
     const data = {
         level: petLevel,
         actions: actionCount
     };
 
-    // Используйте Telegram WebApp API для отправки данных
-    Telegram.WebApp.sendData(JSON.stringify(data));
+    // Используем Telegram WebApp API для отправки данных
+    tg.sendData(JSON.stringify(data));
 }
+
+// Закрытие Mini App
+document.getElementById("close-button").addEventListener("click", () => {
+    tg.close();
+});
 
 // Инициализация при загрузке
 updatePetState();
