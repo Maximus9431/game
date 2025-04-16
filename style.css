@@ -20,6 +20,7 @@ h1 {
     width: 200px;
     height: auto;
     margin-top: 20px;
+    transition: transform 0.2s ease;
 }
 .hidden {
     display: none;
@@ -28,4 +29,24 @@ h1 {
     opacity: 0.4;
     transform: scale(0.9);
     transition: all 0.5s ease;
+}
+.fade-in {
+    animation: fadeIn 1s ease-in forwards;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+/* Эффекты трещин */
+.crack1 {
+    filter: brightness(0.9) contrast(1.2);
+}
+.crack2 {
+    filter: brightness(0.8) contrast(1.4) grayscale(0.3);
 }
