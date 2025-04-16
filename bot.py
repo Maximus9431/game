@@ -1,5 +1,6 @@
 from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+import json
 
 # База данных для хранения состояний питомцев
 pets_db = {}
@@ -11,8 +12,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         pets_db[user_id] = {"level": 0, "action_count": 0}
     
     await update.message.reply_text(
-        f"Привет! Получи своего питомца в виде яйца 🥚.\n"
-        f"Чтобы начать игру, нажми кнопку ниже!!",
+        f"Привет! У тебя есть питомец в виде яйца 🥚.\n"
+        f"Чтобы начать игру, нажми кнопку ниже.",
         reply_markup={
             "inline_keyboard": [[{"text": "Открыть игру", "web_app": {"url": "https://github.com/Maximus9431/game.git"}}]]
         }
@@ -32,7 +33,7 @@ async def handle_web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 # Основная функция
 def main():
-    token = "8135031305:AAHNRm3-PuG10Prai4z-dYV8N3FzElohCEA"
+    token = "8135031305:AAHNRm3-PuG10Prai4z-dYV8N3FzElohCEA"  # Замените на токен вашего бота
     application = Application.builder().token(token).build()
     
     # Регистрация обработчиков
@@ -40,6 +41,7 @@ def main():
     application.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, handle_web_app_data))
     
     # Запуск бота
+    print("Бот запущен...")
     application.run_polling()
 
 if __name__ == "__main__":
