@@ -88,7 +88,12 @@ function crackEgg() {
         document.querySelector('.container').appendChild(petName);
     
         hatchSound.play();
-        Telegram.WebApp.sendData(JSON.stringify({ level: 1, actions: 0 }));
+        Telegram.WebApp.sendData(JSON.stringify({
+            level: 1,
+            actions: 0,
+            pet: chosenPet.name
+          }));
+          
     }, 800);
     
 }

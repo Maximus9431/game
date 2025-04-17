@@ -77,3 +77,31 @@ h1 {
     from { opacity: 1; transform: scale(1); }
     to { opacity: 0; transform: scale(1.5); }
 }
+
+.pet {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 200px;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    animation: pop 0.8s ease;
+  }
+  
+  .pet-name {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 28px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px black;
+    z-index: 1001;
+  }
+  
+  @keyframes pop {
+    0% { transform: scale(0) translate(-50%, -50%); opacity: 0; }
+    100% { transform: scale(1) translate(-50%, -50%); opacity: 1; }
+  }
+  
