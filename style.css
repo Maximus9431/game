@@ -50,3 +50,14 @@ h1 {
 .crack2 {
     filter: brightness(0.8) contrast(1.4) grayscale(0.3);
 }
+
+.swipe-hit {
+    animation: hitEffect 0.2s ease;
+}
+@keyframes hitEffect {
+    0% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.05) rotate(1deg); }
+    50% { transform: scale(0.98) rotate(-1deg); }
+    75% { transform: scale(1.03) rotate(1deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
