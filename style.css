@@ -56,8 +56,9 @@ body {
 }
 
 .pet-container {
-    position: relative;
-    min-height: 300px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
 }
 
 .pet, .pet-name {

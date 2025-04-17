@@ -59,11 +59,29 @@ class EggGame {
     }
 
     generateRandomPet() {
-        const index = Math.floor(Math.random() * 50 + 1);
+        const index = Math.floor(Math.random() * 19) + 1; // От 1 до 19
+        const uniqueNames = [
+            "Барсик", "Мурзик", "Шарик", "Снежок", "Рыжик",
+            "Звёздочка", "Пушистик", "Лунтик", "Спарки", "Тучка",
+            "Комета", "Бусинка", "Вулкан", "Марсик", "Симба",
+            "Тигра", "Персик", "Облачко", "Феникс"
+        ];
         return {
-            name: `Питомец ${index}`,
+            name: uniqueNames[index - 1], // Индексы 0-18 для 19 имен
             img: `pets/pet${index}.png`
         };
+    }
+
+    hatchEgg() {
+        this.cracked = true;
+        this.egg.classList.add('cracked', 'hidden');
+        this.container.classList.add('hidden'); // Скрываем контейнер с яйцом
+        
+        setTimeout(() => {
+            const pet = this.generateRandomPet();
+            this.showPet(pet);
+            this.sendTelegramData(pet);
+        }, 800);
     }
 
     showPet(pet) {
@@ -71,7 +89,9 @@ class EggGame {
             <img src="${pet.img}" class="pet">
             <div class="pet-name">Поздравляем! Это ${pet.name} 🐾</div>
         `;
+        this.petContainer.classList.remove('hidden'); // Показываем контейнер
     }
+}
 
     sendTelegramData(pet) {
         try {
@@ -86,6 +106,5 @@ class EggGame {
             console.error("Ошибка отправки данных:", e);
         }
     }
-}
 
 window.addEventListener('DOMContentLoaded', () => new EggGame());
