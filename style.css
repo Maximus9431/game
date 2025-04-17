@@ -1,5 +1,7 @@
 
 body {
+    touch-action: none;
+    overflow: hidden;
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
     text-align: center;
