@@ -2,7 +2,7 @@ document.body.addEventListener('touchmove', function(e) {
     e.preventDefault();
   }, { passive: false });
   
-const eggColors = ['blue', 'green', 'red', 'purple', 'yellow'];
+const eggColors = ['blue', 'green', 'red', 'pink', 'yellow'];
 const eggColor = eggColors[Math.floor(Math.random() * eggColors.length)];
 const egg = document.getElementById('egg');
 const dragon = document.getElementById('dragon');
