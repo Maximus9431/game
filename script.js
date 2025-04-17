@@ -5,7 +5,6 @@ document.body.addEventListener('touchmove', function(e) {
 const eggColors = ['blue', 'green', 'red', 'pink', 'yellow'];
 const eggColor = eggColors[Math.floor(Math.random() * eggColors.length)];
 const egg = document.getElementById('egg');
-const dragon = document.getElementById('dragon');
 
 const instruction = document.getElementById('instruction');
 
