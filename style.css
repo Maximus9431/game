@@ -24,7 +24,14 @@ body {
 }
 
 .hidden {
-    display: none !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.visible {
+    opacity: 1;
+    visibility: visible;
 }
 
 .cracked {
@@ -45,43 +52,7 @@ body {
     to { opacity: 1; transform: scale(1); }
 }
 
-@keyframes hitEffect {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
-.swipe-hit {
-    animation: hitEffect 0.3s ease;
-}
-
 .pet-container {
     text-align: center;
-    opacity: 0;
     animation: fadeIn 1s forwards;
-}
-
-.pet, .pet-name {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: fadeIn 0.8s ease;
-}
-
-.pet {
-    top: 40%;
-    width: 200px;
-    z-index: 1000;
-}
-
-.pet-name {
-    top: 75%;
-    font-size: 1.2em;
-    color: #fff;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-
-.swipe-hit {
-    transform: rotate(15deg);
-    transition: transform 0.3s;
 }

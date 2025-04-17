@@ -2,11 +2,15 @@ class EggGame {
     constructor() {
         this.egg = document.getElementById('egg');
         this.instruction = document.getElementById('instruction');
-        this.container = document.querySelector('.container');
         this.petContainer = document.querySelector('.pet-container');
         this.swipeCount = 0;
         this.cracked = false;
         this.isMouseDown = false;
+
+        if (!window.Telegram?.WebApp) {
+            alert("Эта игра работает только внутри Telegram Web App!");
+            return;
+        }
 
         this.init();
     }
@@ -75,9 +79,7 @@ class EggGame {
     hatchEgg() {
         this.cracked = true;
         this.egg.classList.add('cracked', 'hidden');
-        this.container.classList.add('hidden');
-        console.log("Вылупляется яйцо!");
-        console.log("Питомец:", pet);
+        this.instruction.classList.add('hidden');
 
         setTimeout(() => {
             const pet = this.generateRandomPet();
@@ -87,16 +89,16 @@ class EggGame {
     }
 
     generateRandomPet() {
-        const index = Math.floor(Math.random() * 19) + 1;
         const uniqueNames = [
             "Барсик", "Мурзик", "Шарик", "Снежок", "Рыжик",
             "Звёздочка", "Пушистик", "Лунтик", "Спарки", "Тучка",
             "Комета", "Бусинка", "Вулкан", "Марсик", "Симба",
             "Тигра", "Персик", "Облачко", "Феникс"
         ];
+        const index = Math.floor(Math.random() * uniqueNames.length);
         return {
-            name: uniqueNames[index - 1],
-            img: `https://maximus9431.github.io/game/pets/pet${index}.png`
+            name: uniqueNames[index],
+            img: `https://maximus9431.github.io/game/pets/pet${index + 1}.png`
         };
     }
 
@@ -105,9 +107,7 @@ class EggGame {
             <img src="${pet.img}" class="pet">
             <div class="pet-name">Поздравляем! Это ${pet.name} 🐾</div>
         `;
-        this.petContainer.classList.remove('hidden');
-        console.log("Вылупляется яйцо!");
-        console.log("Питомец:", pet);
+        this.petContainer.classList.add('visible');
     }
 
     sendTelegramData(pet) {
