@@ -1,12 +1,11 @@
-
 body {
     touch-action: none;
     overflow: hidden;
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
-    text-align: center;
     padding: 20px;
 }
+
 .container {
     max-width: 400px;
     margin: 0 auto;
@@ -14,94 +13,70 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
-h1 {
-    color: #333;
-}
+
 .egg, .dragon {
     width: 200px;
     height: auto;
-    margin-top: 20px;
+    margin: 20px auto;
     transition: transform 0.2s ease;
 }
+
 .hidden {
-    display: none;
+    display: none !important;
 }
+
 .cracked {
     opacity: 0.4;
     transform: scale(0.9);
     transition: all 0.5s ease;
 }
-.fade-in {
-    animation: fadeIn 1s ease-in forwards;
+
+[class^="crack"] {
+    transition: filter 0.3s ease;
 }
+
+.crack1 { filter: brightness(0.9) contrast(1.2); }
+.crack2 { filter: brightness(0.8) contrast(1.4); }
+
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
 }
-/* Эффекты трещин */
-.crack1 {
-    filter: brightness(0.9) contrast(1.2);
-}
-.crack2 {
-    filter: brightness(0.8) contrast(1.4) grayscale(0.3);
+
+@keyframes hitEffect {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
 .swipe-hit {
-    animation: hitEffect 0.2s ease;
+    animation: hitEffect 0.3s ease;
 }
-@keyframes hitEffect {
-    0% { transform: scale(1) rotate(0deg); }
-    25% { transform: scale(1.05) rotate(1deg); }
-    50% { transform: scale(0.98) rotate(-1deg); }
-    75% { transform: scale(1.03) rotate(1deg); }
-    100% { transform: scale(1) rotate(0deg); }
+
+.pet-container {
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
 }
-/* Эффект царапины */
-.scratch-mark {
+
+.pet, .pet-name {
     position: absolute;
-    width: 20px;
-    height: 20px;
-    background: radial-gradient(rgba(0,0,0,0.4), transparent 70%);
-    pointer-events: none;
-    animation: scratchFade 0.4s linear;
-    border-radius: 50%;
-}
-@keyframes scratchFade {
-    from { opacity: 1; transform: scale(1); }
-    to { opacity: 0; transform: scale(1.5); }
+    left: 50%;
+    transform: translateX(-50%);
+    animation: fadeIn 0.8s ease;
 }
 
 .pet {
-    position: absolute;
     top: 40%;
-    left: 50%;
     width: 200px;
-    transform: translate(-50%, -50%);
     z-index: 1000;
-    animation: pop 0.8s ease;
-  }
-  
-  .pet-name {
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 28px;
-    color: white;
-    font-weight: bold;
-    text-shadow: 2px 2px 5px black;
-    z-index: 1001;
-  }
-  
-  @keyframes pop {
-    0% { transform: scale(0) translate(-50%, -50%); opacity: 0; }
-    100% { transform: scale(1) translate(-50%, -50%); opacity: 1; }
-  }
-  
+}
+
+.pet-name {
+    top: 75%;
+    font-size: 1.2em;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
