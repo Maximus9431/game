@@ -1,0 +1,87 @@
+body {
+    touch-action: none;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    padding: 20px;
+}
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.egg, .dragon {
+    width: 200px;
+    height: auto;
+    margin: 20px auto;
+    transition: transform 0.2s ease;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.cracked {
+    opacity: 0.4;
+    transform: scale(0.9);
+    transition: all 0.5s ease;
+}
+
+[class^="crack"] {
+    transition: filter 0.3s ease;
+}
+
+.crack1 { filter: brightness(0.9) contrast(1.2); }
+.crack2 { filter: brightness(0.8) contrast(1.4); }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes hitEffect {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.swipe-hit {
+    animation: hitEffect 0.3s ease;
+}
+
+.pet-container {
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+}
+
+.pet, .pet-name {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: fadeIn 0.8s ease;
+}
+
+.pet {
+    top: 40%;
+    width: 200px;
+    z-index: 1000;
+}
+
+.pet-name {
+    top: 75%;
+    font-size: 1.2em;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.swipe-hit {
+    transform: rotate(15deg);
+    transition: transform 0.3s;
+}
