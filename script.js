@@ -53,3 +53,12 @@ function crackEgg() {
         Telegram.WebApp.sendData(JSON.stringify({ level: 1, actions: 0 }));
     }, 800);
 }
+
+function createScratch(x, y) {
+    const scratch = document.createElement('div');
+    scratch.className = 'scratch-mark';
+    scratch.style.left = x - 10 + 'px';
+    scratch.style.top = y - 10 + 'px';
+    container.appendChild(scratch);
+    setTimeout(() => scratch.remove(), 400);
+}

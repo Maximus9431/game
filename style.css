@@ -61,3 +61,17 @@ h1 {
     75% { transform: scale(1.03) rotate(1deg); }
     100% { transform: scale(1) rotate(0deg); }
 }
+/* Эффект царапины */
+.scratch-mark {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(rgba(0,0,0,0.4), transparent 70%);
+    pointer-events: none;
+    animation: scratchFade 0.4s linear;
+    border-radius: 50%;
+}
+@keyframes scratchFade {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(1.5); }
+}
