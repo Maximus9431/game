@@ -7,6 +7,7 @@ class EggGame {
         this.cracked = false;
         this.isMouseDown = false;
 
+        // Проверка, что игра запущена через Telegram Web App
         if (!window.Telegram?.WebApp) {
             alert("Эта игра работает только внутри Telegram Web App!");
             return;
@@ -16,15 +17,23 @@ class EggGame {
     }
 
     init() {
+        // Массив с возможными цветами яиц
         const eggColors = ['blue', 'green', 'red', 'pink', 'yellow'];
-        this.egg.src = `eggs/${eggColors[Math.floor(Math.random() * eggColors.length)]}.png`;
 
+        // Выбираем случайный цвет из массива
+        const randomColor = eggColors[Math.floor(Math.random() * eggColors.length)];
+
+        // Устанавливаем случайное изображение яйца
+        this.egg.src = `eggs/${randomColor}.png`;
+
+        // Добавляем обработчики событий
         document.addEventListener('touchstart', this.handleTouchStart.bind(this));
         document.addEventListener('touchend', this.handleTouchEnd.bind(this));
         document.addEventListener('mousedown', this.handleMouseDown.bind(this));
         document.addEventListener('mousemove', this.handleMouseMove.bind(this));
         document.addEventListener('mouseup', this.handleMouseUp.bind(this));
 
+        // Отключаем прокрутку страницы во время свайпа
         document.body.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
     }
 
