@@ -14,8 +14,9 @@ class EggGame {
         const eggColors = ['blue', 'green', 'red', 'pink', 'yellow'];
         this.egg.src = `eggs/${eggColors[Math.floor(Math.random() * eggColors.length)]}.png`;
 
-        this.egg.addEventListener('touchstart', this.handleTouchStart.bind(this));
-        this.egg.addEventListener('touchend', this.handleTouchEnd.bind(this));
+        document.addEventListener('touchstart', this.handleTouchStart.bind(this));
+        document.addEventListener('touchend', this.handleTouchEnd.bind(this));
+
 
         document.body.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
     }
