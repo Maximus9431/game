@@ -92,6 +92,7 @@ class EggGame {
 
         setTimeout(() => {
             const pet = this.generateRandomPet();
+            console.log("Сгенерирован питомец:", pet); // Логирование
             this.showPet(pet);
             this.sendTelegramData(pet);
         }, 800);
@@ -104,18 +105,23 @@ class EggGame {
             "Комета", "Бусинка", "Вулкан", "Марсик", "Симба",
             "Тигра", "Персик", "Облачко", "Феникс"
         ];
+
+        // Выбираем случайное имя и индекс изображения
         const index = Math.floor(Math.random() * uniqueNames.length);
         return {
             name: uniqueNames[index],
-            img: `https://maximus9431.github.io/game/pets/pet${index + 1}.png`
+            img: `https://maximus9431.github.io/game/pets/pet${index + 1}.jpg`
         };
     }
 
     showPet(pet) {
+        // Очищаем контейнер питомца
         this.petContainer.innerHTML = `
             <img src="${pet.img}" class="pet">
             <div class="pet-name">Поздравляем! Это ${pet.name} 🐾</div>
         `;
+
+        // Добавляем класс .visible для отображения питомца
         this.petContainer.classList.add('visible');
     }
 
