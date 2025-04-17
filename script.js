@@ -6,7 +6,7 @@ class EggGame {
         this.petContainer = document.querySelector('.pet-container');
         this.swipeCount = 0;
         this.cracked = false;
-        this.isMouseDown = false; // Добавлен флаг для мыши
+        this.isMouseDown = false;
 
         this.init();
     }
@@ -15,11 +15,8 @@ class EggGame {
         const eggColors = ['blue', 'green', 'red', 'pink', 'yellow'];
         this.egg.src = `eggs/${eggColors[Math.floor(Math.random() * eggColors.length)]}.png`;
 
-        // Сенсорные события
         document.addEventListener('touchstart', this.handleTouchStart.bind(this));
         document.addEventListener('touchend', this.handleTouchEnd.bind(this));
-        
-        // События мыши (добавлено)
         document.addEventListener('mousedown', this.handleMouseDown.bind(this));
         document.addEventListener('mousemove', this.handleMouseMove.bind(this));
         document.addEventListener('mouseup', this.handleMouseUp.bind(this));
@@ -27,7 +24,6 @@ class EggGame {
         document.body.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
     }
 
-    // Добавленные методы для мыши
     handleMouseDown(e) {
         this.isMouseDown = true;
         this.startX = e.clientX;
@@ -35,7 +31,7 @@ class EggGame {
 
     handleMouseMove(e) {
         if (!this.isMouseDown || this.cracked) return;
-        
+
         const currentX = e.clientX;
         const distance = currentX - this.startX;
 
@@ -79,8 +75,8 @@ class EggGame {
     hatchEgg() {
         this.cracked = true;
         this.egg.classList.add('cracked', 'hidden');
-        this.container.classList.add('hidden'); // Скрываем контейнер с яйцом
-        
+        this.container.classList.add('hidden');
+
         setTimeout(() => {
             const pet = this.generateRandomPet();
             this.showPet(pet);
@@ -98,7 +94,7 @@ class EggGame {
         ];
         return {
             name: uniqueNames[index - 1],
-            img: `pets/pet${index}.png`
+            img: `https://maximus9431.github.io/game/pets/pet${index}.png`
         };
     }
 
@@ -116,7 +112,8 @@ class EggGame {
                 window.Telegram.WebApp.sendData(JSON.stringify({
                     level: 1,
                     actions: this.swipeCount,
-                    pet: pet.name
+                    pet: pet.name,
+                    img: pet.img
                 }));
             }
         } catch (e) {
