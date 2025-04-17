@@ -1,76 +1,85 @@
+// script.js
+class EggGame {
+    constructor() {
+        this.egg = document.getElementById('egg');
+        this.instruction = document.getElementById('instruction');
+        this.container = document.querySelector('.container');
+        this.petContainer = document.querySelector('.pet-container');
+        this.swipeCount = 0;
+        this.cracked = false;
+        
+        this.init();
+    }
 
-// Отключение прокрутки
-document.body.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+    init() {
+        const eggColors = ['blue', 'green', 'red', 'pink', 'yellow'];
+        this.egg.src = `eggs/${eggColors[Math.floor(Math.random() * eggColors.length)]}.png`;
 
-const egg = document.getElementById('egg');
-const topHalf = document.getElementById('egg-top');
-const bottomHalf = document.getElementById('egg-bottom');
-const instruction = document.getElementById('instruction');
+        this.egg.addEventListener('touchstart', this.handleTouchStart.bind(this));
+        this.egg.addEventListener('touchend', this.handleTouchEnd.bind(this));
+        
+        document.body.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+    }
 
-const crackSound = new Audio('sounds/crack.mp3');
-const hatchSound = new Audio('sounds/hatch.mp3');
+    handleTouchStart(e) {
+        this.startX = e.touches[0].clientX;
+    }
 
-const pets = Array.from({ length: 50 }, (_, i) => ({
-    name: `Питомец ${i + 1}`,
-    img: `pets/pet${i + 1}.png`
-}));
+    handleTouchEnd(e) {
+        if (this.cracked) return;
 
-let startX = 0;
-let swipeCount = 0;
-let cracked = false;
+        const endX = e.changedTouches[0].clientX;
+        const distance = endX - this.startX;
 
-egg.addEventListener('touchstart', e => {
-    startX = e.touches[0].clientX;
-});
-
-egg.addEventListener('touchend', e => {
-    const endX = e.changedTouches[0].clientX;
-    const distance = endX - startX;
-
-    if (Math.abs(distance) > 30 && !cracked) {
-        swipeCount++;
-        instruction.textContent = `Осталось движений: ${10 - swipeCount}`;
-
-        crackSound.currentTime = 0;
-        crackSound.play();
-
-        egg.classList.remove('egg-crack-animate');
-        void egg.offsetWidth;
-        egg.classList.add('egg-crack-animate');
-
-        if (swipeCount >= 10) {
-            cracked = true;
-            crackEgg();
+        if (Math.abs(distance) > 30) {
+            this.swipeCount++;
+            this.updateGameState();
         }
     }
-});
 
-function crackEgg() {
-    egg.classList.add('hidden');
-    topHalf.classList.remove('hidden');
-    bottomHalf.classList.remove('hidden');
-    topHalf.classList.add('crack');
-    bottomHalf.classList.add('crack');
+    updateGameState() {
+        this.instruction.textContent = `Осталось движений: ${10 - this.swipeCount}`;
+        this.egg.classList.add('swipe-hit');
+        setTimeout(() => this.egg.classList.remove('swipe-hit'), 300);
 
-    const pet = pets[Math.floor(Math.random() * pets.length)];
+        if (this.swipeCount >= 4) this.egg.classList.add('crack1');
+        if (this.swipeCount >= 7) this.egg.classList.add('crack2');
+        if (this.swipeCount >= 10) this.hatchEgg();
+    }
 
-    setTimeout(() => {
-        const petImg = document.createElement('img');
-        petImg.src = pet.img;
-        petImg.className = 'pet';
-        document.querySelector('.container').appendChild(petImg);
+    hatchEgg() {
+        this.cracked = true;
+        this.egg.classList.add('cracked', 'hidden');
+        
+        setTimeout(() => {
+            const pet = this.generateRandomPet();
+            this.showPet(pet);
+            this.sendTelegramData(pet);
+        }, 800);
+    }
 
-        const petName = document.createElement('div');
-        petName.className = 'pet-name';
-        petName.textContent = `Поздравляем! Это ${pet.name}`;
-        document.querySelector('.container').appendChild(petName);
+    generateRandomPet() {
+        const pets = [...]; // Ваш массив питомцев
+        return pets[Math.floor(Math.random() * pets.length)];
+    }
 
-        hatchSound.play();
+    showPet(pet) {
+        this.petContainer.innerHTML = `
+            <img src="${pet.img}" class="pet">
+            <div class="pet-name">Поздравляем! Это ${pet.name} 🐾</div>
+        `;
+    }
 
-        Telegram.WebApp.sendData(JSON.stringify({
-            level: 1,
-            actions: 0,
-            pet: pet.name
-        }));
-    }, 800);
+    sendTelegramData(pet) {
+        if (window.Telegram?.WebApp?.sendData) {
+            window.Telegram.WebApp.sendData(JSON.stringify({
+                level: 1,
+                actions: this.swipeCount,
+                pet: pet.name
+            }));
+        }
+    }
 }
+
+// Инициализация игры
+window.addEventListener('DOMContentLoaded', () => new EggGame());

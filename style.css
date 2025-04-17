@@ -1,12 +1,12 @@
-
+/* style.css */
 body {
+    touch-action: none;
+    overflow: hidden;
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
-    text-align: center;
     padding: 20px;
-    overflow: hidden;
-    touch-action: none;
 }
+
 .container {
     max-width: 400px;
     margin: 0 auto;
@@ -14,48 +14,71 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
+    text-align: center;
 }
-.egg-wrapper {
-    position: relative;
+
+.egg, .dragon {
     width: 200px;
-    height: 200px;
-    margin: 0 auto;
+    height: auto;
+    margin: 20px auto;
+    transition: transform 0.2s ease;
 }
-.egg, .egg-half {
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
+
 .hidden {
-    display: none;
+    display: none !important;
 }
-.top.crack {
-    animation: topCrack 0.7s ease forwards;
+
+.cracked {
+    opacity: 0.4;
+    transform: scale(0.9);
+    transition: all 0.5s ease;
 }
-.bottom.crack {
-    animation: bottomCrack 0.7s ease forwards;
+
+/* Crack effects */
+[class^="crack"] {
+    transition: filter 0.3s ease;
 }
-@keyframes topCrack {
-    0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(-80px) rotate(-20deg); opacity: 0; }
+
+.crack1 { filter: brightness(0.9) contrast(1.2); }
+.crack2 { filter: brightness(0.8) contrast(1.4); }
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
 }
-@keyframes bottomCrack {
-    0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(80px) rotate(20deg); opacity: 0; }
+
+@keyframes hitEffect {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
+
+.swipe-hit {
+    animation: hitEffect 0.3s ease;
+}
+
+.pet-container {
+    position: relative;
+    min-height: 300px;
+}
+
+.pet, .pet-name {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: fadeIn 0.8s ease;
+}
+
 .pet {
+    top: 40%;
     width: 200px;
-    margin-top: 20px;
-    animation: pop 0.8s ease;
+    z-index: 1000;
 }
+
 .pet-name {
-    font-size: 24px;
-    margin-top: 10px;
-    font-weight: bold;
-}
-@keyframes pop {
-    0% { opacity: 0; transform: scale(0); }
-    100% { opacity: 1; transform: scale(1); }
+    top: 75%;
+    font-size: 1.2em;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
