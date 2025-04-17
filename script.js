@@ -1,4 +1,3 @@
-// script.js
 class EggGame {
     constructor() {
         this.egg = document.getElementById('egg');
@@ -7,7 +6,7 @@ class EggGame {
         this.petContainer = document.querySelector('.pet-container');
         this.swipeCount = 0;
         this.cracked = false;
-        
+
         this.init();
     }
 
@@ -17,7 +16,7 @@ class EggGame {
 
         this.egg.addEventListener('touchstart', this.handleTouchStart.bind(this));
         this.egg.addEventListener('touchend', this.handleTouchEnd.bind(this));
-        
+
         document.body.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
     }
 
@@ -50,7 +49,7 @@ class EggGame {
     hatchEgg() {
         this.cracked = true;
         this.egg.classList.add('cracked', 'hidden');
-        
+
         setTimeout(() => {
             const pet = this.generateRandomPet();
             this.showPet(pet);
@@ -59,8 +58,11 @@ class EggGame {
     }
 
     generateRandomPet() {
-        const pets = [...]; // Ваш массив питомцев
-        return pets[Math.floor(Math.random() * pets.length)];
+        const index = Math.floor(Math.random() * 50 + 1);
+        return {
+            name: `Питомец ${index}`,
+            img: `pets/pet${index}.png`
+        };
     }
 
     showPet(pet) {
@@ -71,15 +73,18 @@ class EggGame {
     }
 
     sendTelegramData(pet) {
-        if (window.Telegram?.WebApp?.sendData) {
-            window.Telegram.WebApp.sendData(JSON.stringify({
-                level: 1,
-                actions: this.swipeCount,
-                pet: pet.name
-            }));
+        try {
+            if (window.Telegram?.WebApp?.sendData) {
+                window.Telegram.WebApp.sendData(JSON.stringify({
+                    level: 1,
+                    actions: this.swipeCount,
+                    pet: pet.name
+                }));
+            }
+        } catch (e) {
+            console.error("Ошибка отправки данных:", e);
         }
     }
 }
 
-// Инициализация игры
 window.addEventListener('DOMContentLoaded', () => new EggGame());

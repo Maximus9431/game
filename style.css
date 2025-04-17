@@ -1,4 +1,3 @@
-/* style.css */
 body {
     touch-action: none;
     overflow: hidden;
@@ -34,7 +33,6 @@ body {
     transition: all 0.5s ease;
 }
 
-/* Crack effects */
 [class^="crack"] {
     transition: filter 0.3s ease;
 }
@@ -42,7 +40,6 @@ body {
 .crack1 { filter: brightness(0.9) contrast(1.2); }
 .crack2 { filter: brightness(0.8) contrast(1.4); }
 
-/* Animations */
 @keyframes fadeIn {
     from { opacity: 0; transform: scale(0.8); }
     to { opacity: 1; transform: scale(1); }
