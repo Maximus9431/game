@@ -76,6 +76,8 @@ class EggGame {
         this.cracked = true;
         this.egg.classList.add('cracked', 'hidden');
         this.container.classList.add('hidden');
+        console.log("Вылупляется яйцо!");
+        console.log("Питомец:", pet);
 
         setTimeout(() => {
             const pet = this.generateRandomPet();
@@ -104,6 +106,8 @@ class EggGame {
             <div class="pet-name">Поздравляем! Это ${pet.name} 🐾</div>
         `;
         this.petContainer.classList.remove('hidden');
+        console.log("Вылупляется яйцо!");
+        console.log("Питомец:", pet);
     }
 
     sendTelegramData(pet) {
