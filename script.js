@@ -113,8 +113,19 @@ class EggGame {
             { name: "Снежок", img: "https://maximus9431.github.io/game/pets/pet4.jpg", rarity: "Необычный" },
             { name: "Рыжик", img: "https://maximus9431.github.io/game/pets/pet5.jpg", rarity: "Редкий" },
             { name: "Звёздочка", img: "https://maximus9431.github.io/game/pets/pet6.jpg", rarity: "Редкий" },
-            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet7.jpg", rarity: "Легендарный" },
-            { name: "Лунтик", img: "https://maximus9431.github.io/game/pets/pet8.jpg", rarity: "Легендарный" }
+            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet7.jpg", rarity: "Обычный" },
+            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet8.jpg", rarity: "Обычный" },
+            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet9.jpg", rarity: "Обычный" },
+            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet10.jpg", rarity: "Необычный" },
+            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet11.jpg", rarity: "Необычный" },
+            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet12.jpg", rarity: "Необычный" },
+            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet13.jpg", rarity: "Необычный" },
+            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet14.jpg", rarity: "Необычный" },
+            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet15.jpg", rarity: "Редкий" },
+            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet16.jpg", rarity: "Редкий" },
+            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet17.jpg", rarity: "Легендарный" },
+            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet18.jpg", rarity: "Легендарный" },
+            { name: "Лунтик", img: "https://maximus9431.github.io/game/pets/pet19.jpg", rarity: "Легендарный" }
         ];
 
         const rarityWeights = {
