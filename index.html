@@ -1,48 +1,48 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Egg</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pet Egg</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <h1>Разбей яйцо</h1>
-        <div class="pet-container">
-            <div id="egg-container"></div> <!-- Контейнер для 3D-яйца -->
-        </div>
-        <p id="instruction">Проведи по яйцу, чтобы разбить его</p>
-
-        <!-- Навигационные вкладки -->
-        <div id="tabs">
-            <button id="shop-tab" class="tab-button">Магазин</button>
-            <button id="quests-tab" class="tab-button">Квесты</button>
-            <button id="leaderboard-tab" class="tab-button">Таблица лидеров</button>
-        </div>
-
-        <!-- Содержимое вкладок -->
-        <div id="shop" class="tab-content">
-            <h3>Магазин</h3>
-            <button id="buy-egg" class="shop-button">Купить яйцо (10 монет)</button>
-            <button id="buy-food" class="shop-button">Купить корм (5 монет)</button>
-        </div>
-
-        <div id="quests" class="tab-content">
-            <h3>Квесты</h3>
-            <div id="quests-list"></div>
-        </div>
-
-        <div id="leaderboard" class="tab-content">
-            <h3>Таблица лидеров</h3>
-            <div id="leaderboard-list"></div>
-        </div>
+  <div class="container">
+    <h1>Разбей яйцо</h1>
+    <div class="pet-container">
+      <div id="egg-container"></div> <!-- Контейнер для яйца -->
     </div>
-    
-    <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.154/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.154/examples/js/loaders/OBJLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.154/examples/js/loaders/MTLLoader.js"></script>
-    <script src="script.js" defer></script>
+    <p id="instruction">Проведи по яйцу, чтобы разбить его</p>
+
+    <!-- Навигационные вкладки (скрыты до вылупления питомца) -->
+    <div id="tabs" style="display: none;">
+      <button id="shop-tab" class="tab-button">Магазин</button>
+      <button id="quests-tab" class="tab-button">Квесты</button>
+      <button id="leaderboard-tab" class="tab-button">Таблица лидеров</button>
+    </div>
+
+    <!-- Содержимое вкладок -->
+    <div id="shop" class="tab-content">
+      <h3>Магазин</h3>
+      <button id="buy-egg" class="shop-button">Купить яйцо (10 монет)</button>
+      <button id="buy-food" class="shop-button">Купить корм (5 монет)</button>
+    </div>
+
+    <div id="quests" class="tab-content">
+      <h3>Квесты</h3>
+      <div id="quests-list"></div>
+    </div>
+
+    <div id="leaderboard" class="tab-content">
+      <h3>Таблица лидеров</h3>
+      <div id="leaderboard-list"></div>
+    </div>
+  </div>
+
+  <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.154/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.154/examples/js/loaders/OBJLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.154/examples/js/loaders/MTLLoader.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
