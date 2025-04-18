@@ -59,3 +59,27 @@ body {
 .crack2 {
     filter: grayscale(0.3) brightness(0.8);
 }
+
+.shop-button {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.shop-button:hover {
+    background-color: #0b7dda;
+}
+
+#quests, #leaderboard {
+    margin-top: 20px;
+}
+
+#quests-list, #leaderboard-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
