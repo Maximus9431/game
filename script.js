@@ -6,12 +6,16 @@ class EggGame {
         this.shopContainer = document.getElementById('shop');
         this.questsContainer = document.getElementById('quests-list');
         this.leaderboardContainer = document.getElementById('leaderboard-list');
-        
-        const params = new URLSearchParams(window.location.search);
-        this.swipeCount = parseInt(params.get('swipe_count')) || 0;
-        
+        this.tabs = document.querySelectorAll('.tab-button');
+        this.tabContents = document.querySelectorAll('.tab-content');
+
         this.cracked = false;
         this.isMouseDown = false;
+
+        this.currentTab = null;
+
+        const params = new URLSearchParams(window.location.search);
+        this.swipeCount = parseInt(params.get('swipe_count')) || 0;
 
         if (!window.Telegram?.WebApp) {
             alert("Эта игра работает только внутри Telegram Web App!");
@@ -24,18 +28,31 @@ class EggGame {
     init() {
         this.loadRandomEgg();
         this.instruction.textContent = `Осталось движений: ${10 - this.swipeCount}`;
-        
+
         document.addEventListener('touchstart', this.handleTouchStart.bind(this));
         document.addEventListener('touchend', this.handleTouchEnd.bind(this));
         document.addEventListener('mousedown', this.handleMouseDown.bind(this));
         document.addEventListener('mousemove', this.handleMouseMove.bind(this));
         document.addEventListener('mouseup', this.handleMouseUp.bind(this));
-        
-        document.body.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
-        
-        this.loadShop();
-        this.loadQuests();
-        this.loadLeaderboard();
+
+        this.loadTabs();
+    }
+
+    loadTabs() {
+        this.tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                this.switchTab(tab);
+            });
+        });
+    }
+
+    switchTab(tab) {
+        this.tabs.forEach(t => t.classList.remove('active'));
+        this.tabContents.forEach(content => content.style.display = 'none');
+
+        tab.classList.add('active');
+        const contentId = tab.id.replace('-tab', '');
+        document.getElementById(contentId).style.display = 'block';
     }
 
     loadRandomEgg() {
@@ -101,6 +118,7 @@ class EggGame {
         setTimeout(() => {
             const pet = this.generateRandomPet();
             this.showPet(pet);
+            this.showTabs();
             this.sendTelegramData(pet);
         }, 800);
     }
@@ -113,19 +131,8 @@ class EggGame {
             { name: "Снежок", img: "https://maximus9431.github.io/game/pets/pet4.jpg", rarity: "Необычный" },
             { name: "Рыжик", img: "https://maximus9431.github.io/game/pets/pet5.jpg", rarity: "Редкий" },
             { name: "Звёздочка", img: "https://maximus9431.github.io/game/pets/pet6.jpg", rarity: "Редкий" },
-            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet7.jpg", rarity: "Обычный" },
-            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet8.jpg", rarity: "Обычный" },
-            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet9.jpg", rarity: "Обычный" },
-            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet10.jpg", rarity: "Необычный" },
-            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet11.jpg", rarity: "Необычный" },
-            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet12.jpg", rarity: "Необычный" },
-            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet13.jpg", rarity: "Необычный" },
-            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet14.jpg", rarity: "Необычный" },
-            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet15.jpg", rarity: "Редкий" },
-            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet16.jpg", rarity: "Редкий" },
-            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet17.jpg", rarity: "Легендарный" },
-            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet18.jpg", rarity: "Легендарный" },
-            { name: "Лунтик", img: "https://maximus9431.github.io/game/pets/pet19.jpg", rarity: "Легендарный" }
+            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet7.jpg", rarity: "Легендарный" },
+            { name: "Лунтик", img: "https://maximus9431.github.io/game/pets/pet8.jpg", rarity: "Легендарный" }
         ];
 
         const rarityWeights = {
@@ -162,43 +169,8 @@ class EggGame {
         this.petContainer.classList.add('visible');
     }
 
-    loadShop() {
-        // Загрузка магазина, например, для покупки яйца или корма
-        document.getElementById('buy-egg').addEventListener('click', () => {
-            alert("Вы купили яйцо!");
-        });
-
-        document.getElementById('buy-food').addEventListener('click', () => {
-            alert("Вы купили корм!");
-        });
-    }
-
-    loadQuests() {
-        // Пример квестов
-        const quests = [
-            { description: "Прокачайте питомца до уровня 2", reward: 20 },
-            { description: "Проведите 5 движений", reward: 10 },
-        ];
-
-        quests.forEach(quest => {
-            const questItem = document.createElement('div');
-            questItem.textContent = `${quest.description} — Награда: ${quest.reward} монет`;
-            this.questsContainer.appendChild(questItem);
-        });
-    }
-
-    loadLeaderboard() {
-        // Пример таблицы лидеров
-        const leaderboard = [
-            { name: "Игрок 1", score: 100 },
-            { name: "Игрок 2", score: 90 },
-        ];
-
-        leaderboard.forEach(entry => {
-            const entryItem = document.createElement('div');
-            entryItem.textContent = `${entry.name} — ${entry.score} очков`;
-            this.leaderboardContainer.appendChild(entryItem);
-        });
+    showTabs() {
+        this.tabs.forEach(tab => tab.style.display = 'inline-block');
     }
 
     sendTelegramData(pet = null) {

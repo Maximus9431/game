@@ -14,18 +14,26 @@
         </div>
         <p id="instruction">Проведи по яйцу, чтобы разбить его</p>
 
-        <div id="shop">
+        <!-- Навигационные вкладки -->
+        <div id="tabs">
+            <button id="shop-tab" class="tab-button">Магазин</button>
+            <button id="quests-tab" class="tab-button">Квесты</button>
+            <button id="leaderboard-tab" class="tab-button">Таблица лидеров</button>
+        </div>
+
+        <!-- Содержимое вкладок -->
+        <div id="shop" class="tab-content">
             <h3>Магазин</h3>
             <button id="buy-egg" class="shop-button">Купить яйцо (10 монет)</button>
             <button id="buy-food" class="shop-button">Купить корм (5 монет)</button>
         </div>
 
-        <div id="quests">
+        <div id="quests" class="tab-content">
             <h3>Квесты</h3>
             <div id="quests-list"></div>
         </div>
 
-        <div id="leaderboard">
+        <div id="leaderboard" class="tab-content">
             <h3>Таблица лидеров</h3>
             <div id="leaderboard-list"></div>
         </div>
