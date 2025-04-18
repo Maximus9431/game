@@ -3,7 +3,11 @@ class EggGame {
         this.egg = document.getElementById('egg');
         this.instruction = document.getElementById('instruction');
         this.petContainer = document.querySelector('.pet-container');
-        this.swipeCount = 0;
+
+        // Получаем параметр swipe_count из URL
+        const params = new URLSearchParams(window.location.search);
+        this.swipeCount = parseInt(params.get('swipe_count')) || 0;
+
         this.cracked = false;
         this.isMouseDown = false;
 
@@ -17,15 +21,27 @@ class EggGame {
     }
 
     init() {
-        const eggColors = ['blue', 'green', 'red', 'pink', 'yellow'];
-        this.egg.src = `eggs/${eggColors[Math.floor(Math.random() * eggColors.length)]}.png`;
+        // Устанавливаем 3D-изображение яйца
+        this.egg.src = "eggs/egg_3d.png";
 
+        // Отображаем текущее состояние яйца
+        if (this.swipeCount >= 4) this.egg.classList.add('crack1');
+        if (this.swipeCount >= 7) this.egg.classList.add('crack2');
+        if (this.swipeCount >= 10) {
+            this.hatchEgg();
+            return;
+        }
+
+        this.instruction.textContent = `Осталось движений: ${10 - this.swipeCount}`;
+
+        // Добавляем обработчики событий
         document.addEventListener('touchstart', this.handleTouchStart.bind(this));
         document.addEventListener('touchend', this.handleTouchEnd.bind(this));
         document.addEventListener('mousedown', this.handleMouseDown.bind(this));
         document.addEventListener('mousemove', this.handleMouseMove.bind(this));
         document.addEventListener('mouseup', this.handleMouseUp.bind(this));
 
+        // Отключаем прокрутку страницы во время свайпа
         document.body.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
     }
 
@@ -75,6 +91,9 @@ class EggGame {
         if (this.swipeCount >= 4) this.egg.classList.add('crack1');
         if (this.swipeCount >= 7) this.egg.classList.add('crack2');
         if (this.swipeCount >= 10) this.hatchEgg();
+
+        // Отправляем данные в бота
+        this.sendTelegramData();
     }
 
     hatchEgg() {
@@ -113,15 +132,17 @@ class EggGame {
         this.petContainer.classList.add('visible');
     }
 
-    sendTelegramData(pet) {
+    sendTelegramData(pet = null) {
         try {
+            let data = {
+                level: 1,
+                actions: this.swipeCount,
+                pet: pet?.name || null,
+                img: pet?.img || null
+            };
+
             if (window.Telegram?.WebApp?.sendData) {
-                window.Telegram.WebApp.sendData(JSON.stringify({
-                    level: 1,
-                    actions: this.swipeCount,
-                    pet: pet.name,
-                    img: pet.img
-                }));
+                window.Telegram.WebApp.sendData(JSON.stringify(data));
             }
         } catch (e) {
             console.error("Ошибка отправки данных:", e);
