@@ -98,19 +98,43 @@ class EggGame {
         }, 800);
     }
 
+    // Система редкости питомцев
     generateRandomPet() {
-        const uniqueNames = [
-            "Барсик", "Мурзик", "Шарик", "Снежок", "Рыжик",
-            "Звёздочка", "Пушистик", "Лунтик", "Спарки", "Тучка",
-            "Комета", "Бусинка", "Вулкан", "Марсик", "Симба",
-            "Тигра", "Персик", "Облачко", "Феникс"
+        const pets = [
+            { name: "Барсик", img: "https://maximus9431.github.io/game/pets/pet1.jpg", rarity: "Обычный" },
+            { name: "Мурзик", img: "https://maximus9431.github.io/game/pets/pet2.jpg", rarity: "Обычный" },
+            { name: "Шарик", img: "https://maximus9431.github.io/game/pets/pet3.jpg", rarity: "Необычный" },
+            { name: "Снежок", img: "https://maximus9431.github.io/game/pets/pet4.jpg", rarity: "Необычный" },
+            { name: "Рыжик", img: "https://maximus9431.github.io/game/pets/pet5.jpg", rarity: "Редкий" },
+            { name: "Звёздочка", img: "https://maximus9431.github.io/game/pets/pet6.jpg", rarity: "Редкий" },
+            { name: "Пушистик", img: "https://maximus9431.github.io/game/pets/pet7.jpg", rarity: "Легендарный" },
+            { name: "Лунтик", img: "https://maximus9431.github.io/game/pets/pet8.jpg", rarity: "Легендарный" }
         ];
 
-        const index = Math.floor(Math.random() * uniqueNames.length);
-        return {
-            name: uniqueNames[index],
-            img: `https://maximus9431.github.io/game/pets/pet${index + 1}.jpg`
+        // Система вероятности выпадения редких питомцев
+        const rarityWeights = {
+            "Обычный": 0.6,
+            "Необычный": 0.3,
+            "Редкий": 0.09,
+            "Легендарный": 0.01
         };
+
+        // Функция для определения редкости питомца
+        const getRandomPet = () => {
+            const random = Math.random();
+            let cumulativeWeight = 0;
+
+            for (const pet of pets) {
+                cumulativeWeight += rarityWeights[pet.rarity];
+                if (random <= cumulativeWeight) {
+                    return pet;
+                }
+            }
+
+            return pets[0]; // По умолчанию вернём обычного питомца, если что-то пойдет не так
+        };
+
+        return getRandomPet();
     }
 
     showPet(pet) {
@@ -118,6 +142,7 @@ class EggGame {
         this.petContainer.innerHTML = `
             <img src="${pet.img}" class="pet">
             <div class="pet-name">Поздравляем! Это ${pet.name} 🐾</div>
+            <div class="pet-rarity">Редкость: ${pet.rarity}</div>
         `;
         this.petContainer.classList.add('visible');
     }
@@ -128,7 +153,8 @@ class EggGame {
                 level: 1,
                 actions: this.swipeCount,
                 pet: pet?.name || null,
-                img: pet?.img || null
+                img: pet?.img || null,
+                rarity: pet?.rarity || null
             };
 
             if (window.Telegram?.WebApp?.sendData) {
