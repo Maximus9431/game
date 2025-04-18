@@ -1,6 +1,5 @@
 class EggGame {
     constructor() {
-        this.egg = document.getElementById('egg');
         this.instruction = document.getElementById('instruction');
         this.petContainer = document.querySelector('.pet-container');
 
@@ -17,16 +16,66 @@ class EggGame {
             return;
         }
 
+        // Инициализация Three.js
+        this.initThreeJS();
+
         this.init();
     }
 
-    init() {
-        // Устанавливаем 3D-изображение яйца
-        this.egg.src = "eggs/egg_3d.png";
+    initThreeJS() {
+        const container = document.getElementById('egg-container');
 
+        // Создаем сцену, камеру и рендерер
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.renderer.setSize(200, 200); // Размер контейнера
+        container.appendChild(this.renderer.domElement);
+
+        // Освещение
+        const light = new THREE.AmbientLight(0xffffff, 1);
+        this.scene.add(light);
+
+        // Камера
+        this.camera.position.z = 5;
+
+        // Загрузка модели
+        const loader = new THREE.OBJLoader();
+        loader.load(
+            'models/egg_3d.obj', // Путь к .obj файлу
+            (object) => {
+                object.scale.set(0.5, 0.5, 0.5); // Уменьшаем размер модели
+                object.position.y = -1; // Поднимаем модель немного вверх
+                this.scene.add(object);
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total * 100) + '% загружено...');
+            },
+            (error) => {
+                console.error('Ошибка при загрузке модели:', error);
+            }
+        );
+
+        // Анимация
+        this.animate();
+    }
+
+    animate() {
+        requestAnimationFrame(() => this.animate());
+
+        // Вращение модели
+        if (this.scene.children.length > 0) {
+            this.scene.children[0].rotation.x += 0.01;
+            this.scene.children[0].rotation.y += 0.01;
+        }
+
+        this.renderer.render(this.scene, this.camera);
+    }
+
+    init() {
         // Отображаем текущее состояние яйца
-        if (this.swipeCount >= 4) this.egg.classList.add('crack1');
-        if (this.swipeCount >= 7) this.egg.classList.add('crack2');
+        if (this.swipeCount >= 4) this.scene.children[0]?.classList.add('crack1');
+        if (this.swipeCount >= 7) this.scene.children[0]?.classList.add('crack2');
         if (this.swipeCount >= 10) {
             this.hatchEgg();
             return;
@@ -85,11 +134,9 @@ class EggGame {
 
     updateGameState() {
         this.instruction.textContent = `Осталось движений: ${10 - this.swipeCount}`;
-        this.egg.classList.add('swipe-hit');
-        setTimeout(() => this.egg.classList.remove('swipe-hit'), 300);
 
-        if (this.swipeCount >= 4) this.egg.classList.add('crack1');
-        if (this.swipeCount >= 7) this.egg.classList.add('crack2');
+        if (this.swipeCount >= 4) this.scene.children[0]?.classList.add('crack1');
+        if (this.swipeCount >= 7) this.scene.children[0]?.classList.add('crack2');
         if (this.swipeCount >= 10) this.hatchEgg();
 
         // Отправляем данные в бота
@@ -98,7 +145,6 @@ class EggGame {
 
     hatchEgg() {
         this.cracked = true;
-        this.egg.classList.add('cracked', 'hidden');
         this.instruction.classList.add('hidden');
 
         setTimeout(() => {
