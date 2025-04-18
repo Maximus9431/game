@@ -32,7 +32,7 @@ class EggGame {
     }
 
     loadRandomEgg() {
-        const eggCount = 6; // Кол-во PNG файлов в папке /eggs
+        const eggCount = 5; // Количество PNG файлов в папке /eggs
         const randomIndex = Math.floor(Math.random() * eggCount) + 1;
 
         this.eggImage = document.createElement('img');
