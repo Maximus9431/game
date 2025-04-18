@@ -1,97 +1,46 @@
 class EggGame {
     constructor() {
         this.instruction = document.getElementById('instruction');
+        this.eggContainer = document.getElementById('egg-container');
         this.petContainer = document.querySelector('.pet-container');
 
-        // Получаем параметр swipe_count из URL
         const params = new URLSearchParams(window.location.search);
         this.swipeCount = parseInt(params.get('swipe_count')) || 0;
 
         this.cracked = false;
         this.isMouseDown = false;
 
-        // Проверка, что игра запущена через Telegram Web App
         if (!window.Telegram?.WebApp) {
             alert("Эта игра работает только внутри Telegram Web App!");
             return;
         }
 
-        // Инициализация Three.js
-        this.initThreeJS();
-
         this.init();
     }
 
-    initThreeJS() {
-        const container = document.getElementById('egg-container');
-
-        // Создаем сцену, камеру и рендерер
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-        this.renderer = new THREE.WebGLRenderer({ antialias: true });
-        this.renderer.setSize(200, 200); // Размер контейнера
-        container.appendChild(this.renderer.domElement);
-
-        // Освещение
-        const light = new THREE.AmbientLight(0xffffff, 1);
-        this.scene.add(light);
-
-        // Камера
-        this.camera.position.z = 5;
-
-        // Загрузка модели
-        const loader = new THREE.OBJLoader();
-        loader.load(
-            'models/egg_3d.obj', // Путь к .obj файлу
-            (object) => {
-                object.scale.set(0.5, 0.5, 0.5); // Уменьшаем размер модели
-                object.position.y = -1; // Поднимаем модель немного вверх
-                this.scene.add(object);
-            },
-            (xhr) => {
-                console.log((xhr.loaded / xhr.total * 100) + '% загружено...');
-            },
-            (error) => {
-                console.error('Ошибка при загрузке модели:', error);
-            }
-        );
-
-        // Анимация
-        this.animate();
-    }
-
-    animate() {
-        requestAnimationFrame(() => this.animate());
-
-        // Вращение модели
-        if (this.scene.children.length > 0) {
-            this.scene.children[0].rotation.x += 0.01;
-            this.scene.children[0].rotation.y += 0.01;
-        }
-
-        this.renderer.render(this.scene, this.camera);
-    }
-
     init() {
-        // Отображаем текущее состояние яйца
-        if (this.swipeCount >= 4) this.scene.children[0]?.classList.add('crack1');
-        if (this.swipeCount >= 7) this.scene.children[0]?.classList.add('crack2');
-        if (this.swipeCount >= 10) {
-            this.hatchEgg();
-            return;
-        }
-
+        this.loadRandomEgg();
         this.instruction.textContent = `Осталось движений: ${10 - this.swipeCount}`;
 
-        // Добавляем обработчики событий
         document.addEventListener('touchstart', this.handleTouchStart.bind(this));
         document.addEventListener('touchend', this.handleTouchEnd.bind(this));
         document.addEventListener('mousedown', this.handleMouseDown.bind(this));
         document.addEventListener('mousemove', this.handleMouseMove.bind(this));
         document.addEventListener('mouseup', this.handleMouseUp.bind(this));
 
-        // Отключаем прокрутку страницы во время свайпа
         document.body.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+    }
+
+    loadRandomEgg() {
+        const eggCount = 6; // Кол-во PNG файлов в папке /eggs
+        const randomIndex = Math.floor(Math.random() * eggCount) + 1;
+
+        this.eggImage = document.createElement('img');
+        this.eggImage.src = `eggs/egg${randomIndex}.png`;
+        this.eggImage.id = 'egg-image';
+        this.eggImage.classList.add('egg');
+        this.eggContainer.innerHTML = '';
+        this.eggContainer.appendChild(this.eggImage);
     }
 
     handleMouseDown(e) {
@@ -102,13 +51,11 @@ class EggGame {
     handleMouseMove(e) {
         if (!this.isMouseDown || this.cracked) return;
 
-        const currentX = e.clientX;
-        const distance = currentX - this.startX;
-
+        const distance = e.clientX - this.startX;
         if (Math.abs(distance) > 30) {
             this.swipeCount++;
             this.updateGameState();
-            this.startX = currentX;
+            this.startX = e.clientX;
         }
     }
 
@@ -123,9 +70,7 @@ class EggGame {
     handleTouchEnd(e) {
         if (this.cracked) return;
 
-        const endX = e.changedTouches[0].clientX;
-        const distance = endX - this.startX;
-
+        const distance = e.changedTouches[0].clientX - this.startX;
         if (Math.abs(distance) > 30) {
             this.swipeCount++;
             this.updateGameState();
@@ -135,11 +80,10 @@ class EggGame {
     updateGameState() {
         this.instruction.textContent = `Осталось движений: ${10 - this.swipeCount}`;
 
-        if (this.swipeCount >= 4) this.scene.children[0]?.classList.add('crack1');
-        if (this.swipeCount >= 7) this.scene.children[0]?.classList.add('crack2');
+        if (this.swipeCount >= 4) this.eggImage.classList.add('crack1');
+        if (this.swipeCount >= 7) this.eggImage.classList.add('crack2');
         if (this.swipeCount >= 10) this.hatchEgg();
 
-        // Отправляем данные в бота
         this.sendTelegramData();
     }
 
@@ -149,7 +93,6 @@ class EggGame {
 
         setTimeout(() => {
             const pet = this.generateRandomPet();
-            console.log("Сгенерирован питомец:", pet); // Логирование
             this.showPet(pet);
             this.sendTelegramData(pet);
         }, 800);
@@ -171,6 +114,7 @@ class EggGame {
     }
 
     showPet(pet) {
+        this.eggContainer.classList.add('hidden');
         this.petContainer.innerHTML = `
             <img src="${pet.img}" class="pet">
             <div class="pet-name">Поздравляем! Это ${pet.name} 🐾</div>
@@ -180,7 +124,7 @@ class EggGame {
 
     sendTelegramData(pet = null) {
         try {
-            let data = {
+            const data = {
                 level: 1,
                 actions: this.swipeCount,
                 pet: pet?.name || null,

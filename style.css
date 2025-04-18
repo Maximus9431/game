@@ -45,3 +45,17 @@ body {
     color: #333;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
+
+.egg {
+    width: 200px;
+    height: auto;
+    transition: transform 0.2s ease;
+}
+
+.crack1 {
+    filter: brightness(0.9) contrast(1.1);
+}
+
+.crack2 {
+    filter: grayscale(0.3) brightness(0.8);
+}
