@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="https://your-site.com/static/">
+    <!-- Убедитесь, что base корректен или удалите его для локальной разработки -->
+    <!-- <base href="https://your-site.com/static/"> -->
     <title>Pet Egg Game</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="theme-color" content="#ffffff">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="favicon.ico">
 </head>
 <body>
     <div class="container">
         <div id="egg-display">
-            <img src="egg.png" id="egg-image" class="egg">
+            <img src="egg.png" id="egg-image" class="egg" alt="Яйцо">
             <div id="crack-overlay"></div>
         </div>
         <div id="controls">

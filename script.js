@@ -9,12 +9,17 @@ let coins = 0;
 let isHatched = false;
 
 // Инициализация Telegram Web App
-Telegram.WebApp.ready();
-Telegram.WebApp.expand();
+if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+} else {
+    console.warn('Telegram WebApp недоступен. Проверьте окружение.');
+}
 
 // Загрузка начального состояния
 const urlParams = new URLSearchParams(window.location.search);
-swipeCount = parseInt(urlParams.get('swipe')) || 0;
+swipeCount = parseInt(urlParams.get('swipe'), 10);
+if (isNaN(swipeCount)) swipeCount = 0;
 updateDisplay();
 
 // Обработчик свайпов
@@ -22,13 +27,13 @@ eggImage.addEventListener('click', handleSwipe);
 hatchButton.addEventListener('click', hatchEgg);
 
 function handleSwipe() {
-    if(isHatched) return;
-    
+    if (isHatched) return;
+
     swipeCount++;
     updateCrackEffect();
     updateDisplay();
-    
-    if(swipeCount >= 10) {
+
+    if (swipeCount >= 10) {
         hatchButton.disabled = false;
     }
 }
@@ -45,12 +50,12 @@ function updateDisplay() {
 }
 
 function hatchEgg() {
-    if(swipeCount < 10) return;
-    
+    if (swipeCount < 10) return;
+
     const rarity = calculateRarity();
     const petName = generatePetName(rarity);
     coins += 50;
-    
+
     // Отправка данных в бот
     const data = {
         action: 'hatch',
@@ -59,8 +64,13 @@ function hatchEgg() {
         rarity: rarity,
         coinsEarned: 50
     };
-    
-    Telegram.WebApp.sendData(JSON.stringify(data));
+
+    try {
+        Telegram.WebApp.sendData(JSON.stringify(data));
+    } catch (error) {
+        console.error('Ошибка отправки данных в Telegram WebApp:', error);
+    }
+
     isHatched = true;
     eggImage.style.opacity = '0.5';
     hatchButton.disabled = true;
@@ -69,13 +79,17 @@ function hatchEgg() {
 function calculateRarity() {
     const rarities = ['common', 'uncommon', 'rare', 'legendary'];
     const weights = [50, 30, 15, 5];
-    const total = weights.reduce((a, b) => a + b);
+    if (rarities.length !== weights.length) {
+        console.error('Ошибка: длина массивов rarities и weights не совпадает.');
+        return 'common';
+    }
+    const total = weights.reduce((a, b) => a + b, 0);
     const random = Math.random() * total;
-    
+
     let sum = 0;
-    for(let i = 0; i < weights.length; i++) {
+    for (let i = 0; i < weights.length; i++) {
         sum += weights[i];
-        if(random <= sum) return rarities[i];
+        if (random <= sum) return rarities[i];
     }
     return 'common';
 }
@@ -92,5 +106,7 @@ function generatePetName(rarity) {
 
 // Предзагрузка изображений
 ['egg.png', 'crack-0.png', 'crack-1.png', 'crack-2.png'].forEach(src => {
-    new Image().src = src;
+    const img = new Image();
+    img.src = src;
+    img.onerror = () => console.error(`Ошибка загрузки изображения: ${src}`);
 });
