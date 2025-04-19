@@ -23,18 +23,27 @@ if (isNaN(swipeCount)) swipeCount = 0;
 updateDisplay();
 
 // Обработчик свайпов
-eggImage.addEventListener('click', handleSwipe);
+let isTouching = false;
+
+eggImage.addEventListener('mousedown', () => (isTouching = true));
+eggImage.addEventListener('mouseup', () => (isTouching = false));
+eggImage.addEventListener('mousemove', handleSwipe);
+
+eggImage.addEventListener('touchstart', () => (isTouching = true));
+eggImage.addEventListener('touchend', () => (isTouching = false));
+eggImage.addEventListener('touchmove', handleSwipe);
+
 hatchButton.addEventListener('click', hatchEgg);
 
-function handleSwipe() {
-    if (isHatched) return;
+function handleSwipe(event) {
+    if (isHatched || !isTouching) return;
 
     swipeCount++;
     updateCrackEffect();
     updateDisplay();
 
     if (swipeCount >= 10) {
-        hatchButton.disabled = false;
+        hatchEgg();
     }
 }
 
@@ -50,8 +59,6 @@ function updateDisplay() {
 }
 
 function hatchEgg() {
-    if (swipeCount < 10) return;
-
     const rarity = calculateRarity();
     const petName = generatePetName(rarity);
     coins += 50;
